@@ -15,14 +15,19 @@ public class PersonalID {
         //kontrola pre počet číslic, RČ môže mať buď 9 alebo 10 číslic,menej alebo viac je zle
         if(pocetCislic<9 || pocetCislic>10)
             return false;
+
         //kontrola, že ak je číslo 11 alebo 10 ciferné, tak 7 znak môže byť /
         if(id.length()==11 && (pocetCislic!=10 || id.charAt(6)!='/'))
             return false;
         if(id.length()==10 && pocetCislic==9 && id.charAt(6)!='/')
             return false;
-        //kontrola číslice na poradí 2 môže byť u muža 0 alebo 1 a u ženy 5 alebo  6
-        if(id.charAt(2)!='0'&& id.charAt(2)!='1' && id.charAt(2)!='5' && id.charAt(2)!='6')
+
+        //kontrola číslice vrámci mesiaca (poradie 2) môže byť u muža 0 alebo 1 a u ženy 5 alebo  6
+        if(id.charAt(2)!='0'&& id.charAt(2)!='1' && id.charAt(2)!='5' && id.charAt(2)!='6') {
+            System.out.println("Nesprávny mesiac");
             return false;
+        }
+
         //ak je len 9 číslic tak na konci pridať 0
         if(pocetCislic==9)
             id=id+'0';
@@ -52,13 +57,34 @@ public class PersonalID {
             mesiac=mesiac-50;
         }
 
-        //kontrola na správnosť mesiaca
-        if(id.charAt(2)>2 && id.charAt(2)<5 && id.charAt(2)>7) {
-            System.out.println("Nesprávny mesiac");
+        System.out.println("Dátum narodenia: " +den+"."+mesiac+"."+rok);
+
+        //kontrola mesiaca nevieme mať 00 ani 13 a vyššie
+        if(mesiac!=00 && mesiac>12) {
+            System.out.println("Taký mesiac neexistuje");
             return false;
         }
+
+        //kontrola na počet dní v mesiacoch pre 7 z nich nemôže byť viac ako 31 dní, pre 4 nemôže byť viac ako 30
+        if((mesiac==1 || mesiac==3 || mesiac==5 || mesiac==7 || mesiac==8 || mesiac==10 || mesiac==12) && (den>31 || den<1)){
+            System.out.println("Taký deň neexistuje");
+            return false;
+        }
+        if((mesiac==4 || mesiac==6 || mesiac==9 || mesiac==11) && (den>30 || den<1)){
+            System.out.println("Taký deň neexistuje");
+            return false;
+        }
+        //kontrola počtu dní pre február aj s prestupným rokom
+        if(rok%4==0 && mesiac==2 && (den>29 || den<1)){
+            System.out.println("Taký deň neexistuje");
+            return false;
+        }
+        if(rok%4!=0 && mesiac==2 && (den>28 || den<1)){
+            System.out.println("Taký deň neexistuje");
+            return false;
+        }
+
 
         return true;
     }
 }
-
